@@ -1,0 +1,13 @@
+﻿namespace Gymbokning.Models
+{
+    public class GymClass
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime StartTime { get; set; }
+        public TimeSpan Duration { get; set; } //01:00:00
+        public DateTime EndTime { get{ return StartTime + Duration; } }
+        public string Description { get; set; }
+        public ICollection<ApplicationUserGymClass> ?AttendingMembers { get; set; }
+    }
+}
