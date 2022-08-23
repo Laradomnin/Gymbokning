@@ -10,7 +10,7 @@ using Gymbokning.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-
+using System.Diagnostics;
 namespace Gymbokning.Controllers
 {
     public class GymClassesController : Controller
