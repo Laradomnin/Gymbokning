@@ -19,7 +19,10 @@ namespace Gymbokning.Data
         modelBuilder.Entity<ApplicationUserGymClass>()
             .HasKey(t => new { t.ApplicationUserId, t.GymClassId });
         }
-    }
+        public  DbSet<GymClass> GymClass => Set<GymClass>();
+        public  DbSet<ApplicationUserGymClass> ApplicationUserGymClass { get; set; }
+        
+    } 
     
 
  }
