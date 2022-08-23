@@ -21,7 +21,11 @@ namespace Gymbokning.Data
         }
         public  DbSet<GymClass> GymClass => Set<GymClass>();
         public  DbSet<ApplicationUserGymClass> ApplicationUserGymClass { get; set; }
-        
+
+        internal Task FindAsync(string userId, int? id)
+        {
+            throw new NotImplementedException();
+        }
     } 
     
 

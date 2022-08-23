@@ -22,10 +22,22 @@ namespace Gymbokning.Controllers
             this.userManager = userManager;
 
         }
+      
         //Bokar på eller av den inloggade medlemmen till ett pass
         public async Task<ActionResult> BookingToggle(int? id)
         {
+            if (id == null) return BadRequest();
            var userId = userManager.GetUserId(User);
+            if(userId == null) return BadRequest();
+            var attending = await _context.FindAsync(userId, id);
+            if (attending == null)
+            {
+                var booking = new ApplicationUserGymClass {
+                    ApplicationUserId = userId;
+                    GymClassId = (int)id;               
+                    };
+
+            }
 
             // kolla om det finns en ApplicationUserGymClass som har userId + id
             // om den inte finns => skapa en new ApplicationUserGymClass => _context.Add(den nyaapplicationusergymclass)
@@ -33,7 +45,7 @@ namespace Gymbokning.Controllers
 
 
             //_context.SaveChages();
-            
+
             return RedirectToAction(nameof(Index));
         }
 
