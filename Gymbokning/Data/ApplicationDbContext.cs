@@ -20,8 +20,8 @@ namespace Gymbokning.Data
             .HasKey(t => new { t.ApplicationUserId, t.GymClassId });
         }
         public  DbSet<GymClass> GymClass => Set<GymClass>();
-        public  DbSet<ApplicationUserGymClass> ApplicationUserGymClass { get; set; }
-
+        //public  DbSet<ApplicationUserGymClass> ApplicationUserGymClass { get; set; }
+        public DbSet<ApplicationUserGymClass> AppUserGyms => Set<ApplicationUserGymClass>();
         internal Task FindAsync(string userId, int? id)
         {
             throw new NotImplementedException();
