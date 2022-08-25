@@ -1,4 +1,5 @@
 using Gymbokning.Data;
+using Gymbokning.Extensions;
 using Gymbokning.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,11 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     //.AddEntityFrameworkStores<ApplicationDbContext>();
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+    builder.Services.AddControllersWithViews();         
+    var app = builder.Build();
 
-var app = builder.Build();
-
+await app.SeedDataAsync();
+    
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
