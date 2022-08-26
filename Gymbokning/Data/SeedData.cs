@@ -2,6 +2,17 @@
 using Gymbokning.Models;
 using Microsoft.AspNetCore.Identity;
 
+using Bogus;
+
+using Gymbokning.Data;
+
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace Gymbokning.Data
 {
     public class SeedData
@@ -10,16 +21,19 @@ namespace Gymbokning.Data
         private static RoleManager<IdentityRole> roleManager = default!;
         private static UserManager<ApplicationUser> userManager= default!;
 
+       
+
         public static string Description { get; private set; }
 
-#pragma warning disable IDE0060 // Remove unused parameter
-        public static async Task InitAsync (ApplicationDbContext context, IServiceProvider services)
-#pragma warning restore IDE0060 // Remove unused parameter
+
+        public static async Task InitAsync (ApplicationDbContext context, IServiceProvider services, string adminPW)
+
         {
             if (context is null) throw new ArgumentNullException(nameof (context));
             db=context;
+
                if (services is null) throw new ArgumentNullException(nameof (services));
-            if (context.GymClass.Any()) return;
+            if (db.GymClasses.Any()) return;
 
              roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             //om ej funkar ändra i DbContext        
@@ -28,10 +42,53 @@ namespace Gymbokning.Data
             userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
             //om ej funkar ändra i DbContext        
             ArgumentNullException.ThrowIfNull(roleManager);
+
             var roleNames = new[] { "Member", "Admin" };
             var adminEmail = "admin@gym.se";
-            var gymClasses = GetGymClasses();
 
+            var gymClasses = GetGymClasses();
+            await db.AddRangeAsync(gymClasses);
+
+            await AddRolesAsync(roleNames);
+            var admin = await AddAdminAsync(adminEmail,adminPW);
+            await AddRolesAsync(admin,roleNames);
+
+        }
+        private static async Task AddToRolesAsync(ApplicationUser admin, string[] roleNames)
+        {
+            foreach (var role in roleNames)
+            {
+                if (await userManager.IsInRoleAsync(admin, role)) continue;
+                var result = await userManager.AddToRoleAsync(admin, role);
+                if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
+            }
+        }
+        private static async Task<ApplicationUser> AddAdminAsync(string adminEmail, string adminPW)
+        {
+            var found = await userManager.FindByEmailAsync(adminEmail);
+
+            if (found != null) return null!;
+
+            var admin = new ApplicationUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail
+            };
+
+            var result = await userManager.CreateAsync(admin, adminPW);
+            if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));
+
+            return admin;
+        }
+        private static async Task AddRolesAsync(string[] roleNames)
+        {
+            foreach(var roleName in roleNames)
+            {
+                if (await roleManager.RoleExistsAsync(roleName)) continue;
+                var role=new IdentityRole { Name = roleName };
+                var result = await roleManager.CreateAsync(role);
+                if (!result.Succeeded) throw new Exception(string.Join("\n", result.Errors));  
+            }
         }
         private static IEnumerable<GymClass> GetGymClasses()
         {

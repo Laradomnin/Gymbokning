@@ -29,10 +29,7 @@ namespace Gymbokning.Controllers
                           View(await _context.GymClass.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.GymClass'  is null.");
 
-        private ObjectResult View(object value)
-        {
-            throw new NotImplementedException();
-        }
+       
         //Bokar på eller av den inloggade medlemmen till ett pass
         [Authorize]
         public async Task<ActionResult> BookingToggle(int? id)
@@ -57,15 +54,14 @@ namespace Gymbokning.Controllers
                 _context.AppUserGyms.Add(booking);
             }
             else
-            _context.AppUserGyms.Remove(attending);
             {
-                _context.SaveChanges();
+             _context.AppUserGyms.Remove(attending);  
 
 
 
-        }
+            }
 
-    
+     _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

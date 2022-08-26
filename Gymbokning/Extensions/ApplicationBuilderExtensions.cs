@@ -1,5 +1,6 @@
 ﻿using Gymbokning.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 namespace Gymbokning.Extensions
 {
@@ -14,10 +15,11 @@ namespace Gymbokning.Extensions
 
                 //db.Database.EnsureDeleted();
                 //db.Database.Migrate();
-
+                var config = serviceProvider.GetRequiredService<Configuration>();
+                var adminPW = config ["AdminPW"];
                 try
                 {
-                    await SeedData.InitAsync(db, serviceProvider);
+                    await SeedData.InitAsync(db, serviceProvider,adminPW);
 
                 }
                 catch (Exception e)

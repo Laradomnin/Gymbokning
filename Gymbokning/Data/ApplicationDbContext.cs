@@ -8,6 +8,8 @@ namespace Gymbokning.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
+        public DbSet<GymClass> GymClasses => Set<GymClass>();
+        public DbSet<ApplicationUserGymClass> AppUserGyms => Set<ApplicationUserGymClass>();
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -21,7 +23,7 @@ namespace Gymbokning.Data
         }
         public  DbSet<GymClass> GymClass => Set<GymClass>();
         //public  DbSet<ApplicationUserGymClass> ApplicationUserGymClass { get; set; }
-        public DbSet<ApplicationUserGymClass> AppUserGyms => Set<ApplicationUserGymClass>();
+       
         internal Task FindAsync(string userId, int? id)
         {
             throw new NotImplementedException();
