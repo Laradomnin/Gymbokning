@@ -1,11 +1,8 @@
 ﻿using Bogus;
 using Gymbokning.Models;
 using Microsoft.AspNetCore.Identity;
-
 using Bogus;
-
 using Gymbokning.Data;
-
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -21,7 +18,6 @@ namespace Gymbokning.Data
         private static RoleManager<IdentityRole> roleManager = default!;
         private static UserManager<ApplicationUser> userManager= default!;
 
-       
 
         public static string Description { get; private set; }
 
@@ -51,8 +47,7 @@ namespace Gymbokning.Data
 
             await AddRolesAsync(roleNames);
             var admin = await AddAdminAsync(adminEmail,adminPW);
-            await AddRolesAsync(admin,roleNames);
-
+            await AddToRolesAsync(admin,roleNames);
         }
         private static async Task AddToRolesAsync(ApplicationUser admin, string[] roleNames)
         {

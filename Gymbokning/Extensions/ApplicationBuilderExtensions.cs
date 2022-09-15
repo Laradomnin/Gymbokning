@@ -13,14 +13,14 @@ namespace Gymbokning.Extensions
                 var serviceProvider = scope.ServiceProvider;
                 var db = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
-                //db.Database.EnsureDeleted();
-                //db.Database.Migrate();
-                var config = serviceProvider.GetRequiredService<Configuration>();
+                db.Database.EnsureDeleted();
+                db.Database.Migrate();
+                
+                var config = serviceProvider.GetRequiredService<IConfiguration>();
                 var adminPW = config ["AdminPW"];
                 try
                 {
                     await SeedData.InitAsync(db, serviceProvider,adminPW);
-
                 }
                 catch (Exception e)
                 {

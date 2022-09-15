@@ -4,7 +4,9 @@ namespace Gymbokning.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        
-        public ICollection<ApplicationUserGymClass>? AttendedClasses { get; set; }=new List<ApplicationUserGymClass>();
+        public string FirstName { get; set; } = string.Empty;
+        public DateTime TimeOfRegistration { get; set; }
+        public ICollection<ApplicationUserGymClass> AttendinClasses { get; set; } = new List<ApplicationUserGymClass>();
+       
     }
 }
